@@ -25,6 +25,7 @@ object HighRollerApp extends ScalaApplication[HighRollerConfiguration] {
       }
     })
 
+
   }
 
   override def run(conf: HighRollerConfiguration, env: Environment): Unit = {
@@ -32,6 +33,8 @@ object HighRollerApp extends ScalaApplication[HighRollerConfiguration] {
 
     //println(conf)
     env.getValidator.validate(conf)
+
+    env.jersey.packages("com.example.highroller.services")
 
     // register some resources
     val diceEngine = new DiceRollingEngine(conf.diceEngine)

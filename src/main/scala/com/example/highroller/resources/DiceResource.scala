@@ -2,11 +2,11 @@ package com.example.highroller.resources
 
 import javax.validation.Valid
 import javax.ws.rs._
-import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.{Context, MediaType}
 
 import com.codahale.metrics.annotation.Timed
 import com.example.highroller.core.{DiceEngineSettings, Roll}
-import com.example.highroller.services.DiceRollingEngine
+import com.example.highroller.services.{Foo, DiceRollingEngine}
 import com.wordnik.swagger.annotations.{ApiParam, ApiOperation, Api}
 
 /**
@@ -24,6 +24,8 @@ import com.wordnik.swagger.annotations.{ApiParam, ApiOperation, Api}
 )
 class DiceResource(diceEngine : DiceRollingEngine) {
 
+  @Context var foo: Foo = null
+
   @GET()
   @Path("rollMany")
   @Timed
@@ -38,6 +40,13 @@ class DiceResource(diceEngine : DiceRollingEngine) {
   @ApiOperation(value = "Roll a single weighted die")
   def rollOne(): Roll =  {
     diceEngine.roll(1).head
+  }
+
+  @GET
+  @Path("testFoo")
+  @ApiOperation(value = "Test this inject thing")
+  def rollOneFoo() = {
+    Map("foo"->foo, "theRoll"->diceEngine.roll(1).head)
   }
 
   @GET()
